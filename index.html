@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vietnam Trip - Notion Style</title>
+<title>Vietnam Trip - Notion PWA</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,7 +16,6 @@ body{background:#f9f9f9;color:#1a1a1a}
 header{padding:24px 20px;text-align:center;background:#fff;border-bottom:1px solid #e0e0e0;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
 header h1{font-weight:600;font-size:24px;margin-bottom:4px}
 header p{color:#555;font-size:14px}
-
 .container{max-width:520px;margin:auto;padding:16px}
 .tabs{display:flex;gap:8px;margin:16px 0;overflow-x:auto}
 .tab{flex:1;padding:10px 0;text-align:center;background:#f3f3f3;border-radius:12px;font-weight:500;font-size:14px;cursor:pointer;transition:all 0.2s ease}
@@ -25,11 +24,15 @@ header p{color:#555;font-size:14px}
 .card.active{display:block}
 .section{margin-bottom:20px}
 .section h3{font-size:16px;font-weight:600;margin-bottom:8px;color:#111}
+.section h4{font-size:14px;font-weight:600;margin-bottom:4px;color:#333}
 .section ul{list-style:none;padding-left:0}
 .section ul li{padding:6px 0;position:relative;padding-left:22px;line-height:1.5;font-size:14px}
 .section ul li::before{content:"•";position:absolute;left:0;color:#888;font-size:14px;top:2px}
-img{width:100%;border-radius:12px;margin-top:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06);transition:transform 0.2s ease}
-img:hover{transform:scale(1.02)}
+.gallery{display:flex;overflow-x:auto;gap:10px;padding:6px 0;margin-top:8px}
+.gallery img{width:140px;height:100px;object-fit:cover;border-radius:12px;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,0.06);transition:transform 0.2s ease}
+.gallery img:hover{transform:scale(1.05)}
+.day-nav{display:flex;justify-content:space-between;margin-top:12px}
+.day-nav button{padding:6px 12px;border:none;border-radius:8px;background:#f3f3f3;cursor:pointer}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
@@ -37,55 +40,60 @@ img:hover{transform:scale(1.02)}
 
 <header>
 <h1>🇻🇳 Vietnam Trip</h1>
-<p>Хойан • Дананг • Ханой — дневник путешествия в стиле Notion</p>
+<p>Хойан • Дананг • Ханой — дневник в стиле Notion с галереями, едой и достопримечательностями</p>
 </header>
 
 <div class="container">
   <div class="tabs" id="tabs"></div>
-  <!-- Карточки городов будут вставлены скриптом -->
 </div>
 
 <script>
 // ====== ДАННЫЕ ПОЕЗДКИ ======
-const tripData=[
+const tripData = [
 {
-city:"Хойан",
-days:[
-{day:1,title:"Старый город 🌆",activities:["Прогулка по Старому городу с фонариками","Японский мост","Ужин в Riverside Café"],photos:["images/hoian1.jpg"]},
-{day:2,title:"Пляж Ан Банг 🏖",activities:["Солнце и море на пляже Ан Банг","Кофе у реки","Ночной рынок — street food"],photos:["images/hoian2.jpg"]},
-{day:3,title:"Культура 🎨",activities:["Посещение музея купцов","Мастер-класс по изготовлению фонариков","Фотопрогулка по тихим улочкам"],photos:["images/hoian3.jpg"]},
-{day:4,title:"Еда 🍜",activities:["Попробовать Cao Lau и белую розу","Уличная еда на вечернем рынке","Кофе с видом на реку"],photos:["images/hoian4.jpg"]},
-{day:5,title:"Вело-экскурсия 🚲",activities:["Велопрогулка по рисовым полям за городом","Посещение деревень ремесленников","Фото на закате на реке Thu Bon"],photos:["images/hoian5.jpg"]},
-{day:6,title:"Свободный день 🏮",activities:["Повтор любимых мест","Покупки сувениров","Прогулка вечером с фонариками"],photos:["images/hoian6.jpg"]},
+city: "Хойан",
+days: [
+{day:1,title:"Старый город 🌆",folder:"images/hoian/day1",attractions:["Прогулка по Старому городу","Японский мост"],food:["Ужин в Riverside Café","Попробовать Cao Lau"]},
+{day:2,title:"Пляж Ан Банг 🏖",folder:"images/hoian/day2",attractions:["Солнце и море на пляже Ан Банг","Прогулка вдоль реки"],food:["Кофе у реки","Уличная еда на вечернем рынке"]}
 ]
 },
 {
 city:"Дананг",
 days:[
-{day:7,title:"My Khe Beach 🏖",activities:["Отдых на пляже My Khe","Сёрфинг / SUP","Закат на пляже, фото"],photos:["images/danang1.jpg"]},
-{day:8,title:"Ba Na Hills ⛰",activities:["Золотой мост","Канатная дорога и парки","Вечерний ужин в горах"],photos:["images/danang2.jpg"]},
-{day:9,title:"Город и мосты 🏙",activities:["Мост Дракона (днем и ночью)","Ночной рынок Дананга","Rooftop бар"],photos:["images/danang3.jpg"]},
-{day:10,title:"Природа и приключения 🚲",activities:["Мраморные горы","Поездка на байке через перевал Хайван","Фото на смотровых площадках"],photos:["images/danang4.jpg"]},
-{day:11,title:"Еда 🍜",activities:["Попробовать Mi Quang и свежие морепродукты","Уличные кафе и рынки","Расслабляющий вечер на пляже"],photos:["images/danang5.jpg"]},
-{day:12,title:"Отдых 🌿",activities:["Спа / массаж","Пляж и кофе с видом на море","Вечерняя прогулка по набережной"],photos:["images/danang6.jpg"]},
-{day:13,title:"Свободный день 🏮",activities:["Повтор любимых маршрутов","Фото, сувениры","Подготовка к переезду в Ханой"],photos:["images/danang7.jpg"]},
+{day:7,title:"My Khe Beach 🏖",folder:"images/danang/day7",attractions:["Отдых на пляже My Khe","Сёрфинг / SUP"],food:["Закуски на пляже","Морепродукты"]},
+{day:8,title:"Ba Na Hills ⛰",folder:"images/danang/day8",attractions:["Золотой мост","Канатная дорога и парки"],food:["Обед в горах","Закуски в кафе"]}
 ]
 },
 {
 city:"Ханой",
 days:[
-{day:14,title:"История 🏛",activities:["Храм Литературы","Мавзолей Хо Ши Мина","Французский квартал — фото и кофе"],photos:["images/hanoi1.jpg"]},
-{day:15,title:"Гастро 🍲",activities:["Phở, Bún chả, egg coffee","Уличная еда Старого квартала","Прогулка по рынкам и улочкам"],photos:["images/hanoi2.jpg"]},
-{day:16,title:"Прогулка и покупки 🚶‍♂️",activities:["Озеро Хоан Кием","Мост Хук Ло — закат","Покупка сувениров, фото на память"],photos:["images/hanoi3.jpg"]},
+{day:14,title:"История 🏛",folder:"images/hanoi/day14",attractions:["Храм Литературы","Мавзолей Хо Ши Мина"],food:["Phở","Egg coffee"]},
+{day:15,title:"Гастро 🍲",folder:"images/hanoi/day15",attractions:["Прогулка по Старому кварталу","Рынки"],food:["Bún chả","Уличная еда"]}
 ]
 }
 ];
 
+// ====== ФУНКЦИЯ СОЗДАНИЯ ГАЛЕРЕИ ======
+function createGallery(folder){
+  const gallery=document.createElement('div');
+  gallery.className='gallery';
+  for(let i=1;i<=10;i++){
+    const img=document.createElement('img');
+    img.src=`${folder}/${i}.jpg`;
+    img.onerror=()=>img.remove();
+    gallery.appendChild(img);
+  }
+  return gallery;
+}
+
 // ====== ГЕНЕРАЦИЯ ВКЛАДОК И КАРТОЧЕК ======
 const tabsContainer=document.getElementById('tabs');
 const container=document.querySelector('.container');
+const dayIndices = {}; // текущий день для каждого города
 
 tripData.forEach((city,index)=>{
+  dayIndices[city.city.toLowerCase()] = 0;
+
   const tab=document.createElement('div');
   tab.className='tab';
   if(index===0) tab.classList.add('active');
@@ -109,25 +117,55 @@ tripData.forEach((city,index)=>{
     h3.textContent=`День ${day.day} ${day.title}`;
     section.appendChild(h3);
 
-    const ul=document.createElement('ul');
-    day.activities.forEach(act=>{
-      const li=document.createElement('li');
-      li.textContent=act;
-      ul.appendChild(li);
-    });
-    section.appendChild(ul);
+    // Достопримечательности
+    if(day.attractions && day.attractions.length){
+      const h4a=document.createElement('h4'); h4a.textContent="Достопримечательности 🏛";
+      section.appendChild(h4a);
+      const ulA=document.createElement('ul');
+      day.attractions.forEach(a=>{ const li=document.createElement('li'); li.textContent=a; ulA.appendChild(li); });
+      section.appendChild(ulA);
+    }
 
-    day.photos.forEach(photo=>{
-      const img=document.createElement('img');
-      img.src=photo;
-      section.appendChild(img);
-    });
+    // Еда
+    if(day.food && day.food.length){
+      const h4f=document.createElement('h4'); h4f.textContent="Еда 🍜";
+      section.appendChild(h4f);
+      const ulF=document.createElement('ul');
+      day.food.forEach(f=>{ const li=document.createElement('li'); li.textContent=f; ulF.appendChild(li); });
+      section.appendChild(ulF);
+    }
+
+    // Галерея
+    const gallery = createGallery(day.folder);
+    section.appendChild(gallery);
 
     card.appendChild(section);
   });
 
+  // ====== Навигация по дням ======
+  const nav = document.createElement('div'); nav.className='day-nav';
+  const prevBtn = document.createElement('button'); prevBtn.textContent='← Предыдущий день';
+  const nextBtn = document.createElement('button'); nextBtn.textContent='Следующий день →';
+  nav.appendChild(prevBtn); nav.appendChild(nextBtn);
+  card.appendChild(nav);
+
   container.appendChild(card);
+
+  // Привязка кнопок
+  const numDays = city.days.length;
+  prevBtn.onclick = ()=>{ dayIndices[city.city.toLowerCase()]--; if(dayIndices[city.city.toLowerCase()]<0) dayIndices[city.city.toLowerCase()]=numDays-1; showDay(city.city.toLowerCase(),dayIndices[city.city.toLowerCase()]);};
+  nextBtn.onclick = ()=>{ dayIndices[city.city.toLowerCase()]++; if(dayIndices[city.city.toLowerCase()]>=numDays) dayIndices[city.city.toLowerCase()]=0; showDay(city.city.toLowerCase(),dayIndices[city.city.toLowerCase()]);};
 });
+
+// ====== ПОКАЗ ДНЯ ======
+function showDay(cityId,dayIndex){
+  const card=document.getElementById(cityId);
+  const sections=card.querySelectorAll('.section');
+  sections.forEach((sec,idx)=>sec.style.display=(idx===dayIndex)?'block':'none');
+}
+
+// Инициализация: показываем первый день каждого города
+Object.keys(dayIndices).forEach(cityId=>showDay(cityId,0));
 
 // ====== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ======
 function openTab(id){
@@ -137,7 +175,7 @@ function openTab(id){
   document.querySelectorAll('.tab').forEach(t=>{if(t.textContent.toLowerCase()===id) t.classList.add('active');});
 }
 
-// ====== Service Worker ======
+// ====== SERVICE WORKER ======
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
 </script>
 </body>
