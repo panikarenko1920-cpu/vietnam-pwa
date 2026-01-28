@@ -3,48 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vietnam Trip</title>
+<title>Vietnam Trip - Notion Style</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1abc9c">
+<meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Vietnam Trip">
 
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-body { background: #f5f7fa; color: #333; }
-header { padding: 28px 20px; background: linear-gradient(135deg,#1abc9c,#16a085); color: #fff; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
-header h1 { font-size: 28px; margin-bottom: 6px; }
-header p { font-size: 14px; color: #e0f7f1; }
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{background:#f9f9f9;color:#1a1a1a}
+header{padding:24px 20px;text-align:center;background:#fff;border-bottom:1px solid #e0e0e0;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+header h1{font-weight:600;font-size:24px;margin-bottom:4px}
+header p{color:#555;font-size:14px}
 
-.container { max-width: 540px; margin: auto; padding: 16px; }
-.tabs { display: flex; justify-content: space-between; margin: 20px 0; }
-.tab { flex: 1; margin: 0 4px; padding: 12px 0; text-align: center; background: #ecf0f1; border-radius: 16px; font-weight: 600; cursor: pointer; transition: all 0.25s ease; }
-.tab.active { background: #1abc9c; color: #fff; transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-.card { display: none; background: #fff; border-radius: 24px; padding: 20px; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); animation: fadeUp 0.4s ease forwards; }
-.card.active { display: block; }
-.section { margin-bottom: 18px; }
-.section h3 { font-size: 16px; margin-bottom: 6px; color: #16a085; }
-.section ul { list-style: none; padding-left: 16px; }
-.section ul li { padding: 6px 0; position: relative; }
-.section ul li::before { content: "🔥"; position: absolute; left: -20px; }
-
-@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-img { width: 100%; border-radius: 16px; margin: 10px 0; box-shadow: 0 6px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
-img:hover { transform: scale(1.03); }
-
-@media (max-width: 400px) {
-  .tabs { flex-direction: column; }
-  .tab { margin: 6px 0; }
-}
+.container{max-width:520px;margin:auto;padding:16px}
+.tabs{display:flex;gap:8px;margin:16px 0;overflow-x:auto}
+.tab{flex:1;padding:10px 0;text-align:center;background:#f3f3f3;border-radius:12px;font-weight:500;font-size:14px;cursor:pointer;transition:all 0.2s ease}
+.tab.active{background:#ffffff;box-shadow:0 2px 6px rgba(0,0,0,0.08);font-weight:600}
+.card{display:none;background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,0.08);animation:fadeUp 0.3s ease forwards}
+.card.active{display:block}
+.section{margin-bottom:20px}
+.section h3{font-size:16px;font-weight:600;margin-bottom:8px;color:#111}
+.section ul{list-style:none;padding-left:0}
+.section ul li{padding:6px 0;position:relative;padding-left:22px;line-height:1.5;font-size:14px}
+.section ul li::before{content:"•";position:absolute;left:0;color:#888;font-size:14px;top:2px}
+img{width:100%;border-radius:12px;margin-top:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06);transition:transform 0.2s ease}
+img:hover{transform:scale(1.02)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🇻🇳 Vietnam Trip</h1>
-  <p>Хойан • Дананг • Ханой — твой личный дневник путешествия</p>
+<h1>🇻🇳 Vietnam Trip</h1>
+<p>Хойан • Дананг • Ханой — дневник путешествия в стиле Notion</p>
 </header>
 
 <div class="container">
@@ -54,84 +47,89 @@ img:hover { transform: scale(1.03); }
 
 <script>
 // ====== ДАННЫЕ ПОЕЗДКИ ======
-const tripData = [
-  {
-    city: "Хойан",
-    days: [
-      { day: 1, title: "Старый город 🌆", activities: ["Прогулка по Старому городу с фонариками", "Японский мост", "Ужин в Riverside Café"] },
-      { day: 2, title: "Пляж Ан Банг 🏖", activities: ["Солнце и море на пляже Ан Банг", "Кофе у реки", "Ночной рынок — street food"] },
-      { day: 3, title: "Культура 🎨", activities: ["Посещение музея купцов", "Мастер-класс по изготовлению фонариков", "Фотопрогулка по тихим улочкам"] },
-      { day: 4, title: "Еда 🍜", activities: ["Попробовать Cao Lau и белую розу", "Уличная еда на вечернем рынке", "Кофе с видом на реку"] },
-      { day: 5, title: "Вело-экскурсия 🚲", activities: ["Велопрогулка по рисовым полям за городом", "Посещение деревень ремесленников", "Фото на закате на реке Thu Bon"] },
-      { day: 6, title: "Свободный день 🏮", activities: ["Повтор любимых мест", "Покупки сувениров", "Прогулка вечером с фонариками"] }
-    ]
-  },
-  {
-    city: "Дананг",
-    days: [
-      { day: 7, title: "My Khe Beach 🏖", activities: ["Отдых на пляже My Khe", "Сёрфинг / SUP", "Закат на пляже, фото"] },
-      { day: 8, title: "Ba Na Hills ⛰", activities: ["Золотой мост", "Канатная дорога и парки", "Вечерний ужин в горах"] },
-      { day: 9, title: "Город и мосты 🏙", activities: ["Мост Дракона (днем и ночью)", "Ночной рынок Дананга", "Rooftop бар"] },
-      { day: 10, title: "Природа и приключения 🚲", activities: ["Мраморные горы", "Поездка на байке через перевал Хайван", "Фото на смотровых площадках"] },
-      { day: 11, title: "Еда 🍜", activities: ["Попробовать Mi Quang и свежие морепродукты", "Уличные кафе и рынки", "Расслабляющий вечер на пляже"] },
-      { day: 12, title: "Отдых 🌿", activities: ["Спа / массаж", "Пляж и кофе с видом на море", "Вечерняя прогулка по набережной"] },
-      { day: 13, title: "Свободный день 🏮", activities: ["Повтор любимых маршрутов", "Фото, сувениры", "Подготовка к переезду в Ханой"] }
-    ]
-  },
-  {
-    city: "Ханой",
-    days: [
-      { day: 14, title: "История 🏛", activities: ["Храм Литературы", "Мавзолей Хо Ши Мина", "Французский квартал — фото и кофе"] },
-      { day: 15, title: "Гастро 🍲", activities: ["Phở, Bún chả, egg coffee", "Уличная еда Старого квартала", "Прогулка по рынкам и улочкам"] },
-      { day: 16, title: "Прогулка и покупки 🚶‍♂️", activities: ["Озеро Хоан Кием", "Мост Хук Ло — закат", "Покупка сувениров, фото на память"] }
-    ]
-  }
+const tripData=[
+{
+city:"Хойан",
+days:[
+{day:1,title:"Старый город 🌆",activities:["Прогулка по Старому городу с фонариками","Японский мост","Ужин в Riverside Café"],photos:["images/hoian1.jpg"]},
+{day:2,title:"Пляж Ан Банг 🏖",activities:["Солнце и море на пляже Ан Банг","Кофе у реки","Ночной рынок — street food"],photos:["images/hoian2.jpg"]},
+{day:3,title:"Культура 🎨",activities:["Посещение музея купцов","Мастер-класс по изготовлению фонариков","Фотопрогулка по тихим улочкам"],photos:["images/hoian3.jpg"]},
+{day:4,title:"Еда 🍜",activities:["Попробовать Cao Lau и белую розу","Уличная еда на вечернем рынке","Кофе с видом на реку"],photos:["images/hoian4.jpg"]},
+{day:5,title:"Вело-экскурсия 🚲",activities:["Велопрогулка по рисовым полям за городом","Посещение деревень ремесленников","Фото на закате на реке Thu Bon"],photos:["images/hoian5.jpg"]},
+{day:6,title:"Свободный день 🏮",activities:["Повтор любимых мест","Покупки сувениров","Прогулка вечером с фонариками"],photos:["images/hoian6.jpg"]},
+]
+},
+{
+city:"Дананг",
+days:[
+{day:7,title:"My Khe Beach 🏖",activities:["Отдых на пляже My Khe","Сёрфинг / SUP","Закат на пляже, фото"],photos:["images/danang1.jpg"]},
+{day:8,title:"Ba Na Hills ⛰",activities:["Золотой мост","Канатная дорога и парки","Вечерний ужин в горах"],photos:["images/danang2.jpg"]},
+{day:9,title:"Город и мосты 🏙",activities:["Мост Дракона (днем и ночью)","Ночной рынок Дананга","Rooftop бар"],photos:["images/danang3.jpg"]},
+{day:10,title:"Природа и приключения 🚲",activities:["Мраморные горы","Поездка на байке через перевал Хайван","Фото на смотровых площадках"],photos:["images/danang4.jpg"]},
+{day:11,title:"Еда 🍜",activities:["Попробовать Mi Quang и свежие морепродукты","Уличные кафе и рынки","Расслабляющий вечер на пляже"],photos:["images/danang5.jpg"]},
+{day:12,title:"Отдых 🌿",activities:["Спа / массаж","Пляж и кофе с видом на море","Вечерняя прогулка по набережной"],photos:["images/danang6.jpg"]},
+{day:13,title:"Свободный день 🏮",activities:["Повтор любимых маршрутов","Фото, сувениры","Подготовка к переезду в Ханой"],photos:["images/danang7.jpg"]},
+]
+},
+{
+city:"Ханой",
+days:[
+{day:14,title:"История 🏛",activities:["Храм Литературы","Мавзолей Хо Ши Мина","Французский квартал — фото и кофе"],photos:["images/hanoi1.jpg"]},
+{day:15,title:"Гастро 🍲",activities:["Phở, Bún chả, egg coffee","Уличная еда Старого квартала","Прогулка по рынкам и улочкам"],photos:["images/hanoi2.jpg"]},
+{day:16,title:"Прогулка и покупки 🚶‍♂️",activities:["Озеро Хоан Кием","Мост Хук Ло — закат","Покупка сувениров, фото на память"],photos:["images/hanoi3.jpg"]},
+]
+}
 ];
 
-// ====== ГЕНЕРАЦИЯ ВКЛАДОК ======
-const tabsContainer = document.getElementById('tabs');
-const container = document.querySelector('.container');
+// ====== ГЕНЕРАЦИЯ ВКЛАДОК И КАРТОЧЕК ======
+const tabsContainer=document.getElementById('tabs');
+const container=document.querySelector('.container');
 
 tripData.forEach((city,index)=>{
-  // вкладки
-  const tab = document.createElement('div');
-  tab.className = 'tab';
+  const tab=document.createElement('div');
+  tab.className='tab';
   if(index===0) tab.classList.add('active');
-  tab.textContent = city.city;
-  tab.onclick = ()=>openTab(city.city.toLowerCase());
+  tab.textContent=city.city;
+  tab.onclick=()=>openTab(city.city.toLowerCase());
   tabsContainer.appendChild(tab);
 
-  // карточки
-  const card = document.createElement('div');
-  card.id = city.city.toLowerCase();
-  card.className = 'card';
+  const card=document.createElement('div');
+  card.id=city.city.toLowerCase();
+  card.className='card';
   if(index===0) card.classList.add('active');
 
-  const h2 = document.createElement('h2');
-  h2.textContent = city.city;
+  const h2=document.createElement('h2');
+  h2.textContent=city.city;
   card.appendChild(h2);
 
   city.days.forEach(day=>{
-    const section = document.createElement('div');
-    section.className = 'section';
-    const h3 = document.createElement('h3');
-    h3.textContent = `День ${day.day} ${day.title}`;
+    const section=document.createElement('div');
+    section.className='section';
+    const h3=document.createElement('h3');
+    h3.textContent=`День ${day.day} ${day.title}`;
     section.appendChild(h3);
 
-    const ul = document.createElement('ul');
+    const ul=document.createElement('ul');
     day.activities.forEach(act=>{
-      const li = document.createElement('li');
-      li.textContent = act;
+      const li=document.createElement('li');
+      li.textContent=act;
       ul.appendChild(li);
     });
     section.appendChild(ul);
+
+    day.photos.forEach(photo=>{
+      const img=document.createElement('img');
+      img.src=photo;
+      section.appendChild(img);
+    });
+
     card.appendChild(section);
   });
 
   container.appendChild(card);
 });
 
-// ====== ФУНКЦИЯ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК ======
+// ====== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ======
 function openTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
@@ -140,9 +138,7 @@ function openTab(id){
 }
 
 // ====== Service Worker ======
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js');
-}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
 </script>
 </body>
 </html>
