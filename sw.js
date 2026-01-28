@@ -1,12 +1,15 @@
-const CACHE_NAME = 'vietnam-pwa-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
-];
+self.addEventListener('install', e=>{
+  e.waitUntil(caches.open('vietnam-trip').then(cache=>{
+    return cache.addAll([
+      './',
+      './index.html',
+      './manifest.json',
+      './sw.js',
+      './style.css'
+    ]);
+  }));
+});
 
-self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))); });
-self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k=>k!==CACHE_NAME?caches.delete(k):null)))); });
-self.addEventListener('fetch', event => { event.respondWith(caches.match(event.request).then(resp => resp || fetch(event.request))); });
+self.addEventListener('fetch', e=>{
+  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
+});
