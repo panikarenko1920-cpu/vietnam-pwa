@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vietnam Trip - Notion PWA</title>
+<title>Vietnam Trip PWA</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Vietnam Trip">
-
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+/* Общие стили */
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 body{background:#f9f9f9;color:#1a1a1a;overflow-x:hidden;}
 header{padding:20px;text-align:center;background:#fff;border-bottom:1px solid #e0e0e0;box-shadow:0 1px 3px rgba(0,0,0,0.06);position:relative;z-index:5;}
 header h1{font-weight:600;font-size:24px;margin-bottom:4px;}
@@ -44,7 +44,6 @@ header p{color:#555;font-size:14px;}
 </style>
 </head>
 <body>
-
 <header>
 <div class="burger" id="burger">
   <div></div>
@@ -56,10 +55,10 @@ header p{color:#555;font-size:14px;}
 </header>
 
 <div class="sidebar" id="sidebar">
-  <h3>Достопримечательности 🏛</h3>
-  <div id="attr-buttons"></div>
-  <h3>Еда 🍜</h3>
-  <div id="food-buttons"></div>
+<h3>Достопримечательности 🏛</h3>
+<div id="attr-buttons"></div>
+<h3>Еда 🍜</h3>
+<div id="food-buttons"></div>
 </div>
 
 <div class="container" id="main-container"></div>
@@ -67,149 +66,125 @@ header p{color:#555;font-size:14px;}
 <script>
 document.addEventListener('DOMContentLoaded', ()=>{
 
-// ====== ДАННЫЕ ======
-const tripData = [
+const tripData=[
 {city:"Хойан",days:[{day:1,title:"Старый город 🌆",folder:"images/hoian/day1",attractions:["Прогулка по Старому городу","Японский мост"],food:["Ужин в Riverside Café","Попробовать Cao Lau"]},{day:2,title:"Пляж Ан Банг 🏖",folder:"images/hoian/day2",attractions:["Солнце и море на пляже Ан Банг","Прогулка вдоль реки"],food:["Кофе у реки","Уличная еда на вечернем рынке"]}]},
 {city:"Дананг",days:[{day:7,title:"My Khe Beach 🏖",folder:"images/danang/day7",attractions:["Отдых на пляже My Khe","Сёрфинг / SUP"],food:["Закуски на пляже","Морепродукты"]},{day:8,title:"Ba Na Hills ⛰",folder:"images/danang/day8",attractions:["Золотой мост","Канатная дорога и парки"],food:["Обед в горах","Закуски в кафе"]}]},
 {city:"Ханой",days:[{day:14,title:"История 🏛",folder:"images/hanoi/day14",attractions:["Храм Литературы","Мавзолей Хо Ши Мина"],food:["Phở","Egg coffee"]},{day:15,title:"Гастро 🍲",folder:"images/hanoi/day15",attractions:["Прогулка по Старому кварталу","Рынки"],food:["Bún chả","Уличная еда"]}]}
 ];
 
-// ====== ГАЛЕРЕЯ ======
+// === BURGER МЕНЮ ===
+const burger=document.getElementById('burger');
+const sidebar=document.getElementById('sidebar');
+burger.addEventListener('click',()=>sidebar.classList.toggle('open'));
+
+// === ФУНКЦИИ ===
 function createGallery(folder){
   const gallery=document.createElement('div'); gallery.className='gallery';
-  for(let i=1;i<=10;i++){ const img=document.createElement('img'); img.src=`${folder}/${i}.jpg`; img.onerror=()=>img.remove(); gallery.appendChild(img);}
+  for(let i=1;i<=10;i++){const img=document.createElement('img');img.src=`${folder}/${i}.jpg`;img.onerror=()=>img.remove();gallery.appendChild(img);}
   return gallery;
 }
 
-// ====== РЕДАКТИРОВАНИЕ ======
 function addEditForm(section, cityId, dayIndex){
-  const formWrapper = document.createElement('div'); formWrapper.className='edit-form';
+  const formWrapper=document.createElement('div');formWrapper.className='edit-form';
   formWrapper.innerHTML=`
-    <button class="edit-btn">Редактировать / Добавить элемент</button>
-    <div class="edit-inner" style="display:none;margin-top:6px;">
-      <label>Тип:
-        <select class="item-type">
-          <option value="attraction">Достопримечательность 🏛</option>
-          <option value="food">Еда 🍜</option>
-        </select>
-      </label>
-      <label>Название:<input type="text" class="item-name"></label>
-      <label>Описание:<input type="text" class="item-desc"></label>
-      <label>Картинка URL:<input type="text" class="item-img"></label>
-      <button class="add-item-btn">Добавить элемент</button>
-    </div>
-  `;
+  <button class="edit-btn">Редактировать / Добавить элемент</button>
+  <div class="edit-inner" style="display:none;margin-top:6px;">
+  <label>Тип:
+  <select class="item-type"><option value="attraction">Достопримечательность 🏛</option><option value="food">Еда 🍜</option></select></label>
+  <label>Название:<input type="text" class="item-name"></label>
+  <label>Описание:<input type="text" class="item-desc"></label>
+  <label>Картинка URL:<input type="text" class="item-img"></label>
+  <button class="add-item-btn">Добавить элемент</button></div>`;
   section.appendChild(formWrapper);
-
-  const editBtn = formWrapper.querySelector('.edit-btn');
-  const editInner = formWrapper.querySelector('.edit-inner');
-  editBtn.onclick = ()=>{ editInner.style.display = editInner.style.display==='none'?'block':'none'; }
-
-  const addBtn = formWrapper.querySelector('.add-item-btn');
-  addBtn.onclick = ()=>{
-    const type = formWrapper.querySelector('.item-type').value;
-    const name = formWrapper.querySelector('.item-name').value.trim();
-    const desc = formWrapper.querySelector('.item-desc').value.trim();
-    const imgUrl = formWrapper.querySelector('.item-img').value.trim();
-    if(!name) return alert('Введите название!');
-    const card = document.getElementById(cityId);
-    const section = card.querySelectorAll('.section')[dayIndex];
-
-    const h4Selector = type==='attraction'? 'Достопримечательности 🏛' : 'Еда 🍜';
-    let ul = Array.from(section.querySelectorAll('ul')).find(ul=>ul.previousSibling && ul.previousSibling.textContent===h4Selector);
-    if(!ul){ const h4=document.createElement('h4'); h4.textContent=h4Selector; h4.style.marginTop='6px'; section.appendChild(h4); ul=document.createElement('ul'); section.appendChild(ul);}
-
-    const li = document.createElement('li'); 
-    li.innerHTML = `<strong>${name}</strong>${desc?': '+desc:''}${imgUrl?`<br><img src="${imgUrl}" style="width:100px;height:70px;object-fit:cover;border-radius:8px;margin-top:4px;">`:''}`;
+  const editBtn=formWrapper.querySelector('.edit-btn');
+  const editInner=formWrapper.querySelector('.edit-inner');
+  editBtn.onclick=()=>{editInner.style.display=(editInner.style.display==='none')?'block':'none';}
+  const addBtn=formWrapper.querySelector('.add-item-btn');
+  addBtn.onclick=()=>{
+    const type=formWrapper.querySelector('.item-type').value;
+    const name=formWrapper.querySelector('.item-name').value.trim();
+    const desc=formWrapper.querySelector('.item-desc').value.trim();
+    const img=formWrapper.querySelector('.item-img').value.trim();
+    if(!name)return alert('Введите название!');
+    const card=document.getElementById(cityId);
+    const sectionEl=card.querySelectorAll('.section')[dayIndex];
+    const h4Selector=type==='attraction'?'Достопримечательности 🏛':'Еда 🍜';
+    let ul=Array.from(sectionEl.querySelectorAll('ul')).find(u=>u.previousSibling&&u.previousSibling.textContent===h4Selector);
+    if(!ul){const h4=document.createElement('h4');h4.textContent=h4Selector;h4.style.marginTop='6px';sectionEl.appendChild(h4);ul=document.createElement('ul');sectionEl.appendChild(ul);}
+    const li=document.createElement('li');li.innerHTML=`<strong>${name}</strong>${desc?': '+desc:''}${img?`<br><img src="${img}" style="width:100px;height:70px;object-fit:cover;border-radius:8px;margin-top:4px;">`:''}`;
     ul.appendChild(li);
-
     // localStorage
-    const storageKey = `trip_${cityId}_day${dayIndex}`;
-    const existing = JSON.parse(localStorage.getItem(storageKey)||'{}');
-    if(!existing[type]) existing[type]=[];
-    existing[type].push({name,desc,imgUrl});
+    const storageKey=`trip_${cityId}_day${dayIndex}`;
+    const existing=JSON.parse(localStorage.getItem(storageKey)||'{}');
+    if(!existing[type])existing[type]=[];
+    existing[type].push({name,desc,img});
     localStorage.setItem(storageKey,JSON.stringify(existing));
-
     formWrapper.querySelectorAll('input').forEach(i=>i.value='');
   };
 }
 
-// ====== ЗАГРУЗКА localStorage ======
 function loadSavedItems(cityId, dayIndex){
-  const storageKey = `trip_${cityId}_day${dayIndex}`;
-  const data = JSON.parse(localStorage.getItem(storageKey)||'{}');
-  if(!data) return;
-  const card = document.getElementById(cityId);
-  const section = card.querySelectorAll('.section')[dayIndex];
+  const storageKey=`trip_${cityId}_day${dayIndex}`;
+  const data=JSON.parse(localStorage.getItem(storageKey)||'{}');
+  if(!data)return;
+  const card=document.getElementById(cityId);
+  const section=card.querySelectorAll('.section')[dayIndex];
   ['attraction','food'].forEach(type=>{
-    if(!data[type]||!data[type].length) return;
-    const h4Selector = type==='attraction'? 'Достопримечательности 🏛':'Еда 🍜';
-    let ul = Array.from(section.querySelectorAll('ul')).find(ul=>ul.previousSibling && ul.previousSibling.textContent===h4Selector);
-    if(!ul){ const h4=document.createElement('h4'); h4.textContent=h4Selector; h4.style.marginTop='6px'; section.appendChild(h4); ul=document.createElement('ul'); section.appendChild(ul);}
+    if(!data[type]||!data[type].length)return;
+    const h4Selector=type==='attraction'?'Достопримечательности 🏛':'Еда 🍜';
+    let ul=Array.from(section.querySelectorAll('ul')).find(u=>u.previousSibling&&u.previousSibling.textContent===h4Selector);
+    if(!ul){const h4=document.createElement('h4');h4.textContent=h4Selector;h4.style.marginTop='6px';section.appendChild(h4);ul=document.createElement('ul');section.appendChild(ul);}
     data[type].forEach(item=>{
       const li=document.createElement('li');
-      li.innerHTML = `<strong>${item.name}</strong>${item.desc?': '+item.desc:''}${item.imgUrl?`<br><img src="${item.imgUrl}" style="width:100px;height:70px;object-fit:cover;border-radius:8px;margin-top:4px;">`:''}`;
+      li.innerHTML=`<strong>${item.name}</strong>${item.desc?': '+item.desc:''}${item.img?`<br><img src="${item.img}" style="width:100px;height:70px;object-fit:cover;border-radius:8px;margin-top:4px;">`:''}`;
       ul.appendChild(li);
     });
   });
 }
 
-// ====== ГЕНЕРАЦИЯ КАРТОЧЕК ======
+// === Генерация карточек ===
 const mainContainer=document.getElementById('main-container');
-const dayIndices = {};
+const dayIndices={};
 tripData.forEach(city=>{
-  dayIndices[city.city.toLowerCase()] = 0;
+  dayIndices[city.city.toLowerCase()]=0;
   const card=document.createElement('div'); card.id=city.city.toLowerCase(); card.className='card';
-  const h2=document.createElement('h2'); h2.textContent=city.city; card.appendChild(h2);
-
+  const h2=document.createElement('h2');h2.textContent=city.city; card.appendChild(h2);
   city.days.forEach((day,dayIndex)=>{
-    const section=document.createElement('div'); section.className='section';
-    const h3=document.createElement('h3'); h3.textContent=`День ${day.day} ${day.title}`; section.appendChild(h3);
-
-    if(day.attractions && day.attractions.length){ const h4a=document.createElement('h4'); h4a.textContent="Достопримечательности 🏛"; section.appendChild(h4a); const ulA=document.createElement('ul'); day.attractions.forEach(a=>{const li=document.createElement('li'); li.textContent=a; ulA.appendChild(li);}); section.appendChild(ulA);}
-    if(day.food && day.food.length){ const h4f=document.createElement('h4'); h4f.textContent="Еда 🍜"; section.appendChild(h4f); const ulF=document.createElement('ul'); day.food.forEach(f=>{const li=document.createElement('li'); li.textContent=f; ulF.appendChild(li);}); section.appendChild(ulF);}
-
+    const section=document.createElement('div');section.className='section';
+    const h3=document.createElement('h3');h3.textContent=`День ${day.day} ${day.title}`;section.appendChild(h3);
+    if(day.attractions&&day.attractions.length){const h4a=document.createElement('h4');h4a.textContent="Достопримечательности 🏛";section.appendChild(h4a);const ulA=document.createElement('ul');day.attractions.forEach(a=>{const li=document.createElement('li');li.textContent=a;ulA.appendChild(li);});section.appendChild(ulA);}
+    if(day.food&&day.food.length){const h4f=document.createElement('h4');h4f.textContent="Еда 🍜";section.appendChild(h4f);const ulF=document.createElement('ul');day.food.forEach(f=>{const li=document.createElement('li');li.textContent=f;ulF.appendChild(li);});section.appendChild(ulF);}
     section.appendChild(createGallery(day.folder));
-
-    // Форма редактирования
-    addEditForm(section, city.city.toLowerCase(), dayIndex);
-    loadSavedItems(city.city.toLowerCase(), dayIndex);
-
+    addEditForm(section,city.city.toLowerCase(),dayIndex);
+    loadSavedItems(city.city.toLowerCase(),dayIndex);
     card.appendChild(section);
   });
-
-  const nav=document.createElement('div'); nav.className='day-nav';
-  const prevBtn=document.createElement('button'); prevBtn.textContent='← Предыдущий день';
-  const nextBtn=document.createElement('button'); nextBtn.textContent='Следующий день →';
-  nav.appendChild(prevBtn); nav.appendChild(nextBtn); card.appendChild(nav);
+  const nav=document.createElement('div');nav.className='day-nav';
+  const prevBtn=document.createElement('button');prevBtn.textContent='← Предыдущий день';
+  const nextBtn=document.createElement('button');nextBtn.textContent='Следующий день →';
+  nav.appendChild(prevBtn);nav.appendChild(nextBtn);card.appendChild(nav);
   mainContainer.appendChild(card);
-
   const numDays=city.days.length;
-  prevBtn.onclick = ()=>{ dayIndices[city.city.toLowerCase()]--; if(dayIndices[city.city.toLowerCase()]<0) dayIndices[city.city.toLowerCase()]=numDays-1; showDay(city.city.toLowerCase(),dayIndices[city.city.toLowerCase()]);};
-  nextBtn.onclick = ()=>{ dayIndices[city.city.toLowerCase()]++; if(dayIndices[city.city.toLowerCase()]>=numDays) dayIndices[city.city.toLowerCase()]=0; showDay(city.city.toLowerCase(),dayIndices[city.city.toLowerCase()]);};
+  prevBtn.onclick=()=>{dayIndices[city.city.toLowerCase()]--;if(dayIndices[city.city.toLowerCase()]<0)dayIndices[city.city.toLowerCase()]=numDays-1;showDay(city.city.toLowerCase(),dayIndices[city.city.toLowerCase()]);};
+  nextBtn.onclick=()=>{dayIndices[city.city.toLowerCase()]++;if(dayIndices[city.city.toLowerCase()]>=numDays)dayIndices[city.city.toLowerCase()]=0;showDay(city.city.toLowerCase(),dayIndices[city.city.toLowerCase()]);};
 });
 
-// ====== ПОКАЗ ДНЯ ======
-function showDay(cityId,dayIndex){ const card=document.getElementById(cityId); const sections=card.querySelectorAll('.section'); sections.forEach((sec,idx)=>sec.style.display=(idx===dayIndex)?'block':'none'); }
+// === Показ дня ===
+function showDay(cityId,dayIndex){const card=document.getElementById(cityId);const sections=card.querySelectorAll('.section');sections.forEach((sec,idx)=>sec.style.display=(idx===dayIndex)?'block':'none');}
 Object.keys(dayIndices).forEach(cityId=>showDay(cityId,0));
 
-// ====== BURGER МЕНЮ ======
-const burger=document.getElementById('burger'); const sidebar=document.getElementById('sidebar');
-burger.onclick=()=>sidebar.classList.toggle('open');
-
-// ====== МЕНЮ ГОРОДОВ ======
-const attrButtons=document.getElementById('attr-buttons'); const foodButtons=document.getElementById('food-buttons');
+// === Меню городов ===
+const attrButtons=document.getElementById('attr-buttons');const foodButtons=document.getElementById('food-buttons');
 tripData.forEach(city=>{
-  const btnA=document.createElement('button'); btnA.textContent=city.city; btnA.onclick=()=>{openCity(city.city.toLowerCase()); sidebar.classList.remove('open');}; attrButtons.appendChild(btnA);
-  const btnF=document.createElement('button'); btnF.textContent=city.city; btnF.onclick=()=>{openCity(city.city.toLowerCase()); sidebar.classList.remove('open');}; foodButtons.appendChild(btnF);
+  const btnA=document.createElement('button');btnA.textContent=city.city;btnA.onclick=()=>{openCity(city.city.toLowerCase());sidebar.classList.remove('open');};attrButtons.appendChild(btnA);
+  const btnF=document.createElement('button');btnF.textContent=city.city;btnF.onclick=()=>{openCity(city.city.toLowerCase());sidebar.classList.remove('open');};foodButtons.appendChild(btnF);
 });
+function openCity(cityId){document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));document.getElementById(cityId).classList.add('active');showDay(cityId,0);}
 
-function openCity(cityId){ document.querySelectorAll('.card').forEach(c=>c.classList.remove('active')); document.getElementById(cityId).classList.add('active'); showDay(cityId,0);}
-
-// ====== SERVICE WORKER ======
+// === Service Worker ===
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
 
-}); // DOMContentLoaded
+});
 </script>
 </body>
 </html>
