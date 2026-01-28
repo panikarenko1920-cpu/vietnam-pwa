@@ -4,44 +4,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vietnam Trip</title>
-
-<!-- PWA -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#00c6ff">
+<meta name="theme-color" content="#1abc9c">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Vietnam Trip">
 
 <style>
-* { box-sizing: border-box; }
-body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f2f4f7; }
-header { padding: 28px 20px 32px; text-align: center; background: linear-gradient(135deg, #00c6ff, #2ecc71); color: #fff; border-radius: 0 0 24px 24px; }
-.container { padding: 16px; max-width: 520px; margin: auto; }
-.tabs { display: flex; gap: 10px; margin: 16px 0; }
-.tab { flex: 1; padding: 12px 8px; text-align: center; background: #e5e7eb; border-radius: 14px; font-weight: 600; font-size: 14px; cursor: pointer; }
-.tab.active { background: #00c6ff; color: #fff; transform: translateY(-2px); }
-.card { display: none; background: #fff; border-radius: 18px; padding: 20px; animation: fadeUp 0.4s ease; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+body { background: #f5f7fa; color: #333; }
+header { padding: 28px 20px; background: linear-gradient(135deg,#1abc9c,#16a085); color: #fff; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+header h1 { font-size: 28px; margin-bottom: 6px; }
+header p { font-size: 14px; color: #e0f7f1; }
+
+.container { max-width: 540px; margin: auto; padding: 16px; }
+.tabs { display: flex; justify-content: space-between; margin: 20px 0; }
+.tab { flex: 1; margin: 0 4px; padding: 12px 0; text-align: center; background: #ecf0f1; border-radius: 16px; font-weight: 600; cursor: pointer; transition: all 0.25s ease; }
+.tab.active { background: #1abc9c; color: #fff; transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+.card { display: none; background: #fff; border-radius: 24px; padding: 20px; margin-bottom: 20px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); animation: fadeUp 0.4s ease forwards; }
 .card.active { display: block; }
-.section h3 { margin: 12px 0 6px; }
-.section ul { padding-left: 20px; margin: 0 0 12px; }
+.section { margin-bottom: 18px; }
+.section h3 { font-size: 16px; margin-bottom: 6px; color: #16a085; }
+.section ul { list-style: none; padding-left: 16px; }
+.section ul li { padding: 6px 0; position: relative; }
+.section ul li::before { content: "🔥"; position: absolute; left: -20px; }
+
 @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+img { width: 100%; border-radius: 16px; margin: 10px 0; box-shadow: 0 6px 12px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+img:hover { transform: scale(1.03); }
+
+@media (max-width: 400px) {
+  .tabs { flex-direction: column; }
+  .tab { margin: 6px 0; }
+}
 </style>
 </head>
-
 <body>
 
 <header>
   <h1>🇻🇳 Vietnam Trip</h1>
-  <p>Хойан • Дананг • Ханой</p>
+  <p>Хойан • Дананг • Ханой — твой личный дневник путешествия</p>
 </header>
 
 <div class="container">
   <div class="tabs" id="tabs"></div>
-  <!-- Карточки городов будут сгенерированы скриптом -->
+  <!-- Карточки городов будут вставлены скриптом -->
 </div>
 
 <script>
-// ====== ДАННЫЕ ТВОЕЙ ПОЕЗДКИ ======
+// ====== ДАННЫЕ ПОЕЗДКИ ======
 const tripData = [
   {
     city: "Хойан",
@@ -80,26 +92,26 @@ const tripData = [
 const tabsContainer = document.getElementById('tabs');
 const container = document.querySelector('.container');
 
-tripData.forEach((city, index) => {
+tripData.forEach((city,index)=>{
   // вкладки
   const tab = document.createElement('div');
   tab.className = 'tab';
-  if(index === 0) tab.classList.add('active');
+  if(index===0) tab.classList.add('active');
   tab.textContent = city.city;
-  tab.onclick = () => openTab(city.city.toLowerCase());
+  tab.onclick = ()=>openTab(city.city.toLowerCase());
   tabsContainer.appendChild(tab);
 
   // карточки
   const card = document.createElement('div');
   card.id = city.city.toLowerCase();
   card.className = 'card';
-  if(index === 0) card.classList.add('active');
+  if(index===0) card.classList.add('active');
 
   const h2 = document.createElement('h2');
   h2.textContent = city.city;
   card.appendChild(h2);
 
-  city.days.forEach(day => {
+  city.days.forEach(day=>{
     const section = document.createElement('div');
     section.className = 'section';
     const h3 = document.createElement('h3');
@@ -107,7 +119,7 @@ tripData.forEach((city, index) => {
     section.appendChild(h3);
 
     const ul = document.createElement('ul');
-    day.activities.forEach(act => {
+    day.activities.forEach(act=>{
       const li = document.createElement('li');
       li.textContent = act;
       ul.appendChild(li);
@@ -124,14 +136,13 @@ function openTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.tab').forEach(t=>{ if(t.textContent.toLowerCase()===id) t.classList.add('active'); });
+  document.querySelectorAll('.tab').forEach(t=>{if(t.textContent.toLowerCase()===id) t.classList.add('active');});
 }
 
-// ====== Service Worker для офлайн ======
+// ====== Service Worker ======
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js');
 }
 </script>
-
 </body>
 </html>
